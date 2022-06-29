@@ -16,7 +16,8 @@ from schemas.tokensheme import TokenSchema
 from schemas.usersheme import UserSchema, UserCreateSchema
 from utils.security import authenticate_user, create_access_token
 
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'])
+
+ACCESS_TOKEN_EXPIRE_MINUTES = 30 #int(os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'])
 
 user_router = APIRouter()
 
@@ -48,7 +49,7 @@ def sign_up(user_data: UserCreateSchema, db: Session = Depends(get_db)):
     return new_user
 
 
-@user_router.post("/login", response_model=TokenSchema)
+@user_router.post("/token", response_model=TokenSchema)
 def login_for_access_token(
         db: Session = Depends(get_db),
         form_data: OAuth2PasswordRequestForm = Depends()

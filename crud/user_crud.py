@@ -13,9 +13,9 @@ from schemas.usersheme import UserSchema, UserCreateSchema
 from utils.security import hash_password
 from schemas.tokensheme import TokenSchema
 
-ALGORITHM = os.environ['ALGORITHM']
-SECRET_KEY = os.environ['SECRET_KEY']
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'])
+ALGORITHM = 'HS256' #os.environ['ALGORITHM']
+SECRET_KEY = 'coolkey' #os.environ['SECRET_KEY']
+ACCESS_TOKEN_EXPIRE_MINUTES = 30 #int(os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
@@ -42,7 +42,7 @@ def add_user(db: Session, user_data: UserCreateSchema) -> UserSchema:
     return db_user
 
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> usersmodel:
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> UserModel:
     credential_exceptions = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail='Invalid JWT',

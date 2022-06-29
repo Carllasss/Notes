@@ -8,7 +8,7 @@ from crud import note_crud
 from crud.user_crud import get_current_user
 from db import get_db
 from models import UserModel
-from schemas.notesheme import NoteSchema, NoteUpdateSchema, NoteBaseSchema, NoteResponseSchema
+from schemas.notesheme import NoteUpdateSchema, NoteBaseSchema, NoteResponseSchema
 
 note_router = APIRouter()
 

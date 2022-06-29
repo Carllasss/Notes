@@ -1,2 +1,2 @@
-from usersmodel import UserModel
-from notesmodel import NoteModel
+from .usersmodel import UserModel
+from .notesmodel import NoteModel

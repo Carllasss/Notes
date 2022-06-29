@@ -8,11 +8,11 @@ from sqlalchemy.orm import Session
 from jose import jwt
 
 from crud import user_crud
-from models import usersmodel
+from models import UserModel
 
-ALGORITHM = os.environ['ALGORITHM']
-SECRET_KEY = os.environ['SECRET_KEY']
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'])
+ALGORITHM = 'HS256' #os.environ['ALGORITHM']
+SECRET_KEY = 'coolkey' #os.environ['SECRET_KEY']
+ACCESS_TOKEN_EXPIRE_MINUTES = 30 #int(os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'])
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
@@ -26,8 +26,8 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def authenticate_user(db: Session, email: str, password: str) -> Union[bool, usersmodel]:
-    user: usersmodel = user_crud.get_user_by_email(db, email)
+def authenticate_user(db: Session, email: str, password: str) -> Union[bool, UserModel ]:
+    user: UserModel = user_crud.get_user_by_email(db, email)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
