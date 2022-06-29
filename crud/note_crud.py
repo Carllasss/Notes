@@ -2,16 +2,16 @@ from typing import List
 
 from sqlalchemy.orm import Session
 
-from models import notesmodel, usersmodel
+from models import UserModel, NoteModel
 from schemas.notesheme import NoteSchema, NoteUpdateSchema
 
 
 def add_note(
         db: Session,
-        current_user: usersmodel,
+        current_user: UserModel,
         note_data: NoteSchema
 ):
-    note: notesmodel = notesmodel(
+    note: NoteModel = NoteModel(
         text=note_data.text,
     )
     note.owner = current_user
@@ -25,7 +25,7 @@ def update_note(
         db: Session,
         new_note: NoteUpdateSchema,
 ):
-    note: notesmodel = db.query(notesmodel).filter(notesmodel.id == new_note.id).first()
+    note: NoteModel = db.query(NoteModel).filter(NoteModel.id == new_note.id).first()
     note.text = new_note.text
     db.commit()
     db.refresh(note)
@@ -36,14 +36,14 @@ def delete_note(
         db: Session,
         note_id: int,
 ):
-    note: notesmodel = db.query(notesmodel).filter(notesmodel.id == note_id).first()
+    note: NoteModel = db.query(NoteModel).filter(NoteModel.id == note_id).first()
     db.delete(note)
     db.commit()
 
 
 def get_user_notes(
         db: Session,
-        current_user: usersmodel,
-) -> List[notesmodel]:
-    notes = db.query(notesmodel).filter(notesmodel.owner == current_user).all()
+        current_user: UserModel,
+) -> List[NoteModel]:
+    notes = db.query(NoteModel).filter(NoteModel.owner == current_user).all()
     return notes
