@@ -11,13 +11,13 @@ from db import get_db
 from models import UserModel
 from schemas.usersheme import UserSchema, UserCreateSchema
 from utils.security import hash_password
-from schemas.tokensheme import TokenSchema
+from schemas.tokensheme import TokenSchema, TokenUpdateSchema
 
-ALGORITHM = 'HS256' #os.environ['ALGORITHM']
-SECRET_KEY = 'coolkey' #os.environ['SECRET_KEY']
-ACCESS_TOKEN_EXPIRE_MINUTES = 30 #int(os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'])
+ALGORITHM = 'HS256'  # os.environ['ALGORITHM']
+SECRET_KEY = 'coolkey'  # os.environ['SECRET_KEY']
+ACCESS_TOKEN_EXPIRE_MINUTES = 30  # int(os.environ['ACCESS_TOKEN_EXPIRE_MINUTES'])
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='users/token')
 
 
 def get_user_by_email(db: Session, email: str) -> Optional[UserModel]:
@@ -53,7 +53,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         email: str = payload.get('sub')
         if email is None:
             raise credential_exceptions
-        token_data = TokenSchema(email=email)
+        token_data = TokenUpdateSchema(email=email)
     except JWTError:
         raise credential_exceptions
     user = get_user_by_email(db, email=token_data.email)
