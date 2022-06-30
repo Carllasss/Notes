@@ -13,13 +13,13 @@ from schemas.notesheme import NoteUpdateSchema, NoteBaseSchema, NoteResponseSche
 note_router = APIRouter()
 
 
-@note_router.get('', response_model=List[NoteResponseSchema])
+@note_router.get('', response_model=List[NoteResponseSchema], tags=['Note'])
 def get_my_notes(db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
     notes = note_crud.get_user_notes(db, current_user)
     return notes
 
 
-@note_router.post('', response_model=List[NoteResponseSchema])
+@note_router.post('', response_model=List[NoteResponseSchema], tags=['Note'])
 def add_note(
         note_data: NoteBaseSchema,
         db: Session = Depends(get_db),
@@ -34,7 +34,7 @@ def add_note(
     return notes
 
 
-@note_router.put('', response_model=List[NoteResponseSchema])
+@note_router.put('', response_model=List[NoteResponseSchema], tags=['Note'])
 def update_note(
         note_data: NoteUpdateSchema,
         db: Session = Depends(get_db),
@@ -48,7 +48,7 @@ def update_note(
     return notes
 
 
-@note_router.delete('/{note_id:int}', response_model=List[NoteResponseSchema])
+@note_router.delete('/{note_id:int}', response_model=List[NoteResponseSchema], tags=['Note'])
 def delete_note(
         note_id: int,
         db: Session = Depends(get_db),
